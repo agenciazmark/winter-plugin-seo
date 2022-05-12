@@ -1,0 +1,21 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: zmark.seo::lang.sitemap_item.definition
+
+# Model Form Field configuration
+form: $/zmark/seo/models/sitemap/fields.yaml
+
+# Model Class name
+modelClass: Zmark\Seo\Models\Sitemap
+
+# Default redirect location
+defaultRedirect: zmark/seo/sitemap
+
+# Update page
+update:
+    title: zmark.seo::lang.plugin.name
+    redirect: zmark/seo/sitemap
+    redirectClose: system/settings

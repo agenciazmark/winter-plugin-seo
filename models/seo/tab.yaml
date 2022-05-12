@@ -1,0 +1,14 @@
+# ===================================
+#  Field Definitions
+# ===================================
+
+zmark_seotab@update:
+    tab: zmark.seo::lang.seotab.title
+    type: zmark_seotab
+    pageType: cms-page
+    disabled: true
+zmark_seotab@create:
+    tab: zmark.seo::lang.seotab.title
+    type: partial
+    path: $/zmark/seo/formwidgets/seotab/partials/_seotab_create.htm
+    disabled: true

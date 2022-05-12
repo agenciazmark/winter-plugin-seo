@@ -1,0 +1,36 @@
+# ===================================
+#  Field Definitions
+# ===================================
+
+fields:
+    type:
+        label: zmark.seo::lang.seo.type
+        type: dropdown
+        span: left
+    reference:
+        label: zmark.seo::lang.seo.page
+        type: dropdown
+        span: left
+        dependsOn: type
+    title:
+        label: zmark.seo::lang.seo.title
+        span: left
+        attributes:
+            maxlength: 70
+    description:
+        label: zmark.seo::lang.seo.description
+        span: left
+        attributes:
+            maxlength: 155
+    keywords:
+        label: zmark.seo::lang.seo.keywords
+        span: left
+        comment: zmark.seo::lang.seo.keywords_hint
+        attributes:
+            maxlength: 255
+    image:
+        label: zmark.seo::lang.seo.image
+        type: fileupload
+        mode: image
+        span: left
+        imageHeight: 260

@@ -1,0 +1,24 @@
+{
+    "name": "zmark/seo-plugin",
+    "type": "winter-plugin",
+    "description": "SEO & Sitemap plugin for multi-lingual October CMS sites",
+    "keywords": ["winter", "wintercms", "seo", "sitemap", "translate"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Zmark",
+            "email": "contato@zmark.com.br"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/agenciazmark/winter-plugin-seo"
+        }
+    ],
+    "require": {
+        "php": ">=7.0",
+        "composer/installers": "~1.0"
+    },
+    "minimum-stability": "dev"
+}

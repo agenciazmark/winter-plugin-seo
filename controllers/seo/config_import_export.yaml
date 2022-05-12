@@ -1,0 +1,14 @@
+# ===================================
+#  Import/Export Behavior Config
+# ===================================
+
+export:
+    title: zmark.seo::lang.seo.export
+    modelClass: Zmark\Seo\Models\SeoExport
+    list: $/zmark/seo/models/seoimportexport/columns.yaml
+    redirect: zmark/seo/seo
+import:
+    title: zmark.seo::lang.seo.import
+    modelClass: Zmark\Seo\Models\SeoImport
+    list: $/zmark/seo/models/seoimportexport/columns.yaml
+    redirect: zmark/seo/seo

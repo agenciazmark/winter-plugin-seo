@@ -1,0 +1,6 @@
+plugin:
+    name: 'zmark.seo::lang.plugin.name'
+    description: 'zmark.seo::lang.plugin.description'
+    author: Zmark
+    icon: icon-line-chart
+    replaces: {  }

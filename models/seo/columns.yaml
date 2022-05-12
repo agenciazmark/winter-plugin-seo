@@ -1,0 +1,16 @@
+# ===================================
+#  Column Definitions
+# ===================================
+
+columns:
+    type:
+        label: zmark.seo::lang.seo.type
+    model_title:
+        label: zmark.seo::lang.seo.page
+        sortable: false
+    title:
+        label: zmark.seo::lang.seo.title
+    description:
+        label: zmark.seo::lang.seo.description
+    keywords:
+        label: zmark.seo::lang.seo.keywords
