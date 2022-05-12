@@ -1,7 +1,7 @@
 <?php namespace Zmark\Seo\Updates;
 
 use Schema;
-use October\Rain\Database\Updates\Migration;
+use Winter\Storm\Database\Updates\Migration;
 
 class CreateSitemapsTable extends Migration
 {
