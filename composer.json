@@ -1,7 +1,7 @@
 {
     "name": "zmark/seo-plugin",
     "type": "winter-plugin",
-    "description": "SEO & Sitemap plugin for multi-lingual October CMS sites",
+    "description": "SEO & Sitemap plugin for multi-lingual Winter CMS sites",
     "keywords": ["winter", "wintercms", "seo", "sitemap", "translate"],
     "license": "MIT",
     "authors": [
