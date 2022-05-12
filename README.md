@@ -1,3 +1,5 @@
+# Sitemap disabled
+
 # Multi-lingual SEO plugin
 
 This plugin allows to create SEO meta content for multi-lingual websites.
