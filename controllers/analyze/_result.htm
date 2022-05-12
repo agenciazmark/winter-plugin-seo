@@ -1,0 +1,550 @@
+<?php
+
+    function getRemoteFilesize($url, $formatSize = true, $useHead = true)
+    {
+        if (false !== $useHead) {
+            stream_context_set_default(array('http' => array('method' => 'HEAD')));
+        }
+        $head = array_change_key_case(get_headers($url, 1));
+        // content-length of download (in bytes), read from Content-Length: field
+        $clen = isset($head['content-length']) ? $head['content-length'] : 0;
+        // cannot retrieve file size, return "-1"
+        if (!$clen) {
+            return -1;
+        }
+        if (!$formatSize) {
+            return $clen; // return size in bytes
+        }
+        $size = $clen;
+        switch ($clen) {
+            case $clen < 1024:
+                $size = $clen .' B'; break;
+            case $clen < 1048576:
+                $size = round($clen / 1024, 2) .' KiB'; break;
+            case $clen < 1073741824:
+                $size = round($clen / 1048576, 2) . ' MiB'; break;
+            case $clen < 1099511627776:
+                $size = round($clen / 1073741824, 2) . ' GiB'; break;
+        }
+        return $clen; // return formatted size
+    }
+    
+    //analise de tag canonical
+    if($result['canonical'])
+    {
+        if($result['url'] == $result['canonical'])
+        {
+            $canonical = "A tag canonical é igual a url analisada";
+        }
+        else
+        {
+            $canonical = "A tag canonical é diferente da url analisada ".$result['canonical'];
+        }
+    }
+    else
+    {
+        $canonical = "Nenhuma tag canonical foi encontrada";
+    }
+    //analise de tag title
+    if($result['title'])
+    {
+        if(strlen($result['title']) > 55)
+        {
+            $title = 'Tag title muito grande. Usando '.strlen($result["title"]).' de 55 caracteres: '.$result["title"];
+        }
+        else if(strlen($result['title']) < 35)
+        {
+            $title = 'Tag title muito pequena. Usando '.strlen($result["title"]).' de 55 caracteres: '.$result["title"];
+        }
+        else
+        {
+            $title = "Tag title está dentro dos parametros recomendados: ".$result['title'];
+        }
+    }
+    else
+    {
+        $title = "Nenhuma tag title foi encontrada";
+    }
+    //analise de tag description
+    if($result['description'])
+    {
+        if(strlen($result['description']) > 150)
+        {
+            $description = 'Tag description muito grande. Usando '.strlen($result["description"]).' de 150 caracteres: '.$result["description"];
+        }
+        else if(strlen($result['description']) < 100)
+        {
+            $description = 'Tag description muito pequena. Usando '.strlen($result["description"]).' de 150 caracteres: '.$result["description"];
+        }
+        else
+        {
+            $description = "Tag description está dentro dos parametros recomendados: ".$result['description'];
+        }
+    }
+    else
+    {
+        $description = "Nenhuma tag description foi encontrada";
+    }
+    //analise de proporção de codigo por texto
+    if(round($result['full_page']['codeToTxtRatio']['ratio']) > 25)
+    {
+        $codeToTxtRatio = "A proporção de código por texto da página está dentro dos parametros: ".round($result['full_page']['codeToTxtRatio']['ratio'])."%";
+    }
+    else
+    {
+        $codeToTxtRatio = "A proporção de código por texto da página está baixa: ".round($result['full_page']['codeToTxtRatio']['ratio'])."% onde o ideal é a partir de 25%";
+    }
+    //analise de quantidade de palavras por página
+    if($result['full_page']['word_count'] > 300)
+    {
+        $word_count = "A quantidade de palavras na página está dentro dos parametros: ".$result['full_page']['word_count'];
+    }
+    else
+    {
+        $word_count = "A quantidade de palavras na página está abaixo dos parametros: ".$result['full_page']['word_count']." onde o ideal é a partir de 300";
+    }
+
+    function formatSizeUnits($bytes)
+    {
+        if ($bytes >= 1073741824)
+        {
+            $bytes = number_format($bytes / 1073741824, 2) . ' GB';
+        }
+        elseif ($bytes >= 1048576)
+        {
+            $bytes = number_format($bytes / 1048576, 2) . ' MB';
+        }
+        elseif ($bytes >= 1024)
+        {
+            $bytes = number_format($bytes / 1024, 2) . ' KB';
+        }
+        elseif ($bytes > 1)
+        {
+            $bytes = $bytes . ' bytes';
+        }
+        elseif ($bytes == 1)
+        {
+            $bytes = $bytes . ' byte';
+        }
+        else
+        {
+            $bytes = '0 bytes';
+        }
+
+        return $bytes;
+    }
+
+?>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="report-widget">
+            <h3>Análise Geral</h3>
+            <div class="control-status-list">
+                <ul>
+                    <li>
+                        <span class="status-icon info">1</span>
+                        <span class="status-text">URL</span>
+                        <span class="status-label"><?php echo $result['url']; ?></span>
+                    </li>
+                    <li>
+                        <span class="status-icon info">2</span>
+                        <span class="status-text">URL Canônica</span>
+                        <span class="status-label"><?php echo $canonical; ?></span>
+                    </li>
+                    <li>
+                        <span class="status-icon info">3</span>
+                        <span class="status-text">Title</span>
+                        <span class="status-label"><?php echo $title; ?></span>
+                    </li>
+                    <li>
+                        <span class="status-icon info">4</span>
+                        <span class="status-text">Description</span>
+                        <span class="status-label"><?php echo $description; ?></span>
+                    </li>
+                    <li>
+                        <span class="status-icon info">5</span>
+                        <span class="status-text">Proporção de Código por Texto</span>
+                        <span class="status-label"><?php echo $codeToTxtRatio; ?></span>
+                    </li>
+                    <li>
+                        <span class="status-icon info">6</span>
+                        <span class="status-text">Quantidade de Palavras na Página</span>
+                        <span class="status-label"><?php echo $word_count; ?></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="report-widget">
+            <h3>10 Palavras-chave mais encontradas</h3>
+            <div class="control-status-list">
+                <ul>
+                    <?php
+                        $count = 1;
+                        foreach (array_slice($result['full_page']['keywords'],0,10) as $key => $value) 
+                        {
+                    ?>
+                        <li>
+                            <span class="status-icon info"><?php echo $count; ?></span>
+                            <span class="status-text"><?php echo $key; ?></span>
+                            <span class="status-label"><?php echo $value; ?></span>
+                        </li>
+                    <?php
+                        $count++;
+                        }
+                    ?>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="report-widget">
+            <h3>10 Palavras-chave de cauda longa mais encontradas</h3>
+            <div class="control-status-list">
+                <ul>
+                    <?php
+                        $count = 1;
+                        foreach (array_slice($result['full_page']['longTailKeywords'],0,10) as $key => $value) 
+                        {
+                            $caudalonga = explode(' ',$key);
+                            if(count($caudalonga)>1)
+                            {
+                    ?>
+                                <li>
+                                    <span class="status-icon info"><?php echo $count; ?></span>
+                                    <span class="status-text"><?php echo $key; ?></span>
+                                    <span class="status-label"><?php echo $value; ?></span>
+                                </li>
+                    <?php
+                                $count++;
+                            }
+                        }
+                    ?>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="report-widget">
+            <h3>Análise das Tags H1 - A página deve possuir apenas UM H1</h3>
+            <div class="control-status-list">
+                <ul>
+                    <?php
+                        $count = 0;
+                        foreach ($result['full_page']['headers'] as $key => $value) 
+                        {
+                            if($key == 'h1')
+                            {
+                                if($value['count']>0)
+                                {
+                                    $count = 1;
+                                    foreach ($value['headers'] as $h1) 
+                                    {
+                    ?>
+                                        <li>
+                                            <span class="status-icon info"><?php echo $count; ?></span>
+                                            <span class="status-text">H1</span>
+                                            <span class="status-label"><?php echo $h1; ?></span>
+                                        </li>
+                    <?php
+                                        $count++;
+                                    }
+                                }
+                                else
+                                {
+                                    ?>
+                                        <li>
+                                            <span class="status-icon info">0</span>
+                                            <span class="status-text">H1</span>
+                                            <span class="status-label">Nenhum H1 encontrado - É MUITO importante ter UM h1</span>
+                                        </li>
+                                    <?php
+                                }
+                            }
+                        }
+                        
+                    ?>
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="report-widget">
+            <h3>Análise das Tags H2 - A página pode ter mais de um h2</h3>
+            <div class="control-status-list">
+                <ul>
+                    <?php
+                        $count = 0;
+                        foreach ($result['full_page']['headers'] as $key => $value) 
+                        {
+                            if($key == 'h2')
+                            {
+                                if($value['count']>0)
+                                {
+                                    $count = 1;
+                                    foreach ($value['headers'] as $h2) 
+                                    {
+                    ?>
+                                        <li>
+                                            <span class="status-icon info"><?php echo $count; ?></span>
+                                            <span class="status-text">H2</span>
+                                            <span class="status-label"><?php echo $h2; ?></span>
+                                        </li>
+                    <?php
+                                        $count++;
+                                    }
+                                }
+                                else
+                                {
+                                    ?>
+                                        <li>
+                                            <span class="status-icon info">0</span>
+                                            <span class="status-text">H2</span>
+                                            <span class="status-label">Nenhum H2 encontrado - É importante ter pelo menos um h2</span>
+                                        </li>
+                                    <?php
+                                }
+                            }
+                        }
+                        
+                    ?>
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="report-widget">
+            <h3>Análise das Tags H3 - A página pode ter mais de um h3</h3>
+            <div class="control-status-list">
+                <ul>
+                    <?php
+                        $count = 0;
+                        foreach ($result['full_page']['headers'] as $key => $value) 
+                        {
+                            if($key == 'h3')
+                            {
+                                if($value['count']>0)
+                                {
+                                    $count = 1;
+                                    foreach ($value['headers'] as $h3) 
+                                    {
+                    ?>
+                                        <li>
+                                            <span class="status-icon info"><?php echo $count; ?></span>
+                                            <span class="status-text">H3</span>
+                                            <span class="status-label"><?php echo $h3; ?></span>
+                                        </li>
+                    <?php
+                                        $count++;
+                                    }
+                                }
+                                else
+                                {
+                                    ?>
+                                        <li>
+                                            <span class="status-icon info">0</span>
+                                            <span class="status-text">H3</span>
+                                            <span class="status-label">Nenhum H3 encontrado</span>
+                                        </li>
+                                    <?php
+                                }
+                            }
+                        }
+                        
+                    ?>
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="report-widget">
+            <h3>Análise das Tags H4 - A página pode ter mais de um h4</h3>
+            <div class="control-status-list">
+                <ul>
+                    <?php
+                        $count = 0;
+                        foreach ($result['full_page']['headers'] as $key => $value) 
+                        {
+                            if($key == 'h4')
+                            {
+                                if($value['count']>0)
+                                {
+                                    $count = 1;
+                                    foreach ($value['headers'] as $h4) 
+                                    {
+                    ?>
+                                        <li>
+                                            <span class="status-icon info"><?php echo $count; ?></span>
+                                            <span class="status-text">H4</span>
+                                            <span class="status-label"><?php echo $h4; ?></span>
+                                        </li>
+                    <?php
+                                        $count++;
+                                    }
+                                }
+                                else
+                                {
+                                    ?>
+                                        <li>
+                                            <span class="status-icon info">0</span>
+                                            <span class="status-text">H4</span>
+                                            <span class="status-label">Nenhum H4 encontrado</span>
+                                        </li>
+                                    <?php
+                                }
+                            }
+                        }
+                        
+                    ?>
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="report-widget">
+            <h3>Análise das Imagens - Peso</h3>
+            <div class="control-status-list">
+                <ul>
+                    <?php
+                        $count = 0;
+                        foreach ($result['full_page']['images']['images'] as $image) 
+                        {
+                            
+                            $count++;  
+                            $size = getRemoteFilesize($image['src']);
+                            $sizeFormated = formatSizeUnits($size);
+                            $sizeKb = $size/1024;
+                            if($sizeKb > 300)
+                            {
+                                $sizeMessage = "Imagem muito pesada. Procure usar imagens com menos de 300kbs.";
+                            }
+                            else if($size < 1)
+                            {
+                                $sizeMessage = "Não foi possível analisar a imagem.";
+                            }
+                            else
+                            {
+                                $sizeMessage = "Imagem com peso ideal";
+                            }
+                    ?>
+                            <li>
+                                <span class="status-icon info"><?php echo $count; ?></span>
+                                <span class="status-text">Imagem: <?php echo $image['src']; ?></span>
+                                <span class="status-label">Peso: <?php echo $sizeFormated.' - '.$sizeMessage; ?></span>
+                            </li>
+                    <?php
+                        }
+                        if($count>0)
+                        {
+                    ?>
+                            <li>
+                                <span class="status-icon info">*</span>
+                                <span class="status-text">Sugestão de site para redução do peso das imagens</span>
+                                <span class="status-label"><a href="https://tinypng.com/" target="_blank" title="tiny png">https://tinypng.com/</a></span>
+                            </li>
+                    <?php
+                        }
+                        
+                    ?>
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="report-widget">
+            <h3>Análise das Imagens - Alt - Todas as imagens DEVEM ter a tag alt</h3>
+            <div class="control-status-list">
+                <ul>
+                    <?php
+                        $count = 0;
+                        foreach ($result['full_page']['images']['images'] as $image) 
+                        {
+                            $count++; 
+                    ?>
+                            <li>
+                                <span class="status-icon info"><?php echo $count; ?></span>
+                                <span class="status-text">Imagem: <?php echo $image['src']; ?></span>
+                                <span class="status-label"><?php echo (($image['alt']) ? $image['alt'] : 'Sem Alt'); ?></span>
+                            </li>
+                    <?php
+                        }
+                        if($count>0)
+                        {
+                    ?>
+                            <li>
+                                <span class="status-icon info">*</span>
+                                <span class="status-text">Total de imagens com alt x Total de imagens</span>
+                                <span class="status-label"><?php echo $result['full_page']['images']['count_alt']. ' de '.$result['full_page']['images']['count']; ?> imagens com tag alt</span>
+                            </li>
+                    <?php
+                        }
+                        
+                    ?>
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="report-widget">
+            <h3>Análise das Imagens - Title - Todas as imagens DEVEM ter a tag title</h3>
+            <div class="control-status-list">
+                <ul>
+                    <?php
+                        $count = 0;
+                        $qtdTitle = 0;
+                        foreach ($result['full_page']['images']['images'] as $image) 
+                        {
+                            $count++;                             
+                            if($image['title'])
+                            {
+                                $qtdTitle++;
+                            }
+                    ?>
+                            <li>
+                                <span class="status-icon info"><?php echo $count; ?></span>
+                                <span class="status-text">Imagem: <?php echo $image['src']; ?></span>
+                                <span class="status-label"><?php echo (($image['title']) ? $image['title'] : 'Sem Title'); ?></span>
+                            </li>
+                    <?php
+                        }
+                        if($count>0)
+                        {
+                    ?>
+                            <li>
+                                <span class="status-icon info">*</span>
+                                <span class="status-text">Total de imagens com title x Total de imagens</span>
+                                <span class="status-label"><?php echo $qtdTitle. ' de '.$result['full_page']['images']['count']; ?> imagens com tag title</span>
+                            </li>
+                    <?php
+                        }
+                        
+                    ?>
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
